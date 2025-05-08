@@ -3,224 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <title>Felix Svensexa Quiz</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #eaf4fc;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-      }
-      .quiz-container {
-        background-color: #fff;
-        padding: 2rem;
-        border-radius: 1rem;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        max-width: 700px;
-        width: 100%;
-      }
-      h1 {
-        text-align: center;
-        margin-bottom: 1rem;
-      }
-      .question {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-      }
-      .answers {
-        margin-bottom: 1rem;
-      }
-      .answers label {
-        display: block;
-        margin-bottom: 0.5rem;
-      }
-      .hidden {
-        display: none;
-      }
-      button {
-        background-color: #2e8b57;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-      }
-      .result {
-        text-align: center;
-        font-size: 1.4rem;
-        margin-top: 2rem;
-      }
-      .username {
-        text-align: center;
-        margin-bottom: 2rem;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="quiz-container">
       <h1>Felix Svensexa Quiz</h1>
       <div id="start-screen">
         <div class="username">
-          <label for="username">Vad vill du bli kallad under quizet?</label>
-          <input type="text" id="username" />
+          <label for="username">Vad vill du bli kallad under quizet?</label
+          ><br />
+          <input
+            type="text"
+            id="username"
+            style="margin-top: 0.5rem; width: 100%"
+          />
           <button onclick="startQuiz()">Starta Quiz</button>
         </div>
       </div>
       <div id="quiz" class="hidden"></div>
       <div id="result" class="result hidden"></div>
     </div>
-
-    <script>
-      const questions = [
-        {
-          type: "mc",
-          question: "Vad sög Felix av för något när vi var yngre?",
-          answers: ["Dildo", "Morot", "Banan"],
-          correct: 1,
-        },
-        {
-          type: "text",
-          question:
-            "Vad hade Felix för raggningsreplik för att få alla brudarna på fall när vi var på Gotland?",
-          correctAnswer: "Vart ligger ICA någonstans?",
-        },
-        {
-          type: "mc",
-          question: "Vilka ställen har han inte varit till?",
-          answers: ["Trolltunga", "Trollsjön", "Galdhöpiggen"],
-          correct: 1,
-        },
-        {
-          type: "mc",
-          question: "Vad hette Felix fotbollsklubb i Luleå?",
-          answers: ["Notviken IK", "Notas BK", "Tuna FC"],
-          correct: 0,
-        },
-        {
-          type: "mc",
-          question: "Vad säger Felix i klippet?",
-          answers: [
-            "Rebecka svarar inte mig.",
-            "mobilen är snart död.",
-            "har ingen mottagning här.",
-          ],
-          correct: 2,
-        },
-        {
-          type: "mc",
-          question: "Vilket vapen testade Felix under besöket på bilden ovan?",
-          answers: ["Kaststjärna", "Nunchucks", "AK-74"],
-          correct: 0,
-        },
-        {
-          type: "mc",
-          question: "Var togs bilden?",
-          answers: [
-            "Ninja och Samurai Museum Tokyo",
-            "Norrköpings Samurai Museum",
-            "Medeltida Museum Tokyo",
-          ],
-          correct: 0,
-        },
-        {
-          type: "text",
-          question:
-            "Vad brukade Felix säga när han ville hålla med någon med orten slang?",
-          correctAnswer: "Sanningen bror",
-        },
-        {
-          type: "text",
-          question:
-            "Felix har bott på många ställen i världen, nämn 4 stycken.",
-          correctAnswer:
-            "Luleå, Upplands Väsby, Nya Zeeland, Solna, Sollentuna",
-        },
-        {
-          type: "text",
-          question: "Hur träffades Felix och Rebecka?",
-          correctAnswer: "Tinder",
-        },
-      ];
-
-      let currentQuestion = 0;
-      let score = 0;
-      let userName = "";
-
-      function startQuiz() {
-        userName =
-          document.getElementById("username").value.trim() || "Deltagare";
-        document.getElementById("start-screen").classList.add("hidden");
-        showQuestion();
-      }
-
-      function showQuestion() {
-        const quizDiv = document.getElementById("quiz");
-        quizDiv.classList.remove("hidden");
-        quizDiv.innerHTML = "";
-
-        if (currentQuestion >= questions.length) {
-          showResult();
-          return;
-        }
-
-        const q = questions[currentQuestion];
-        const questionEl = document.createElement("div");
-        questionEl.className = "question";
-        questionEl.textContent = `Fråga ${currentQuestion + 1} av ${
-          questions.length
-        } – ${userName}: ${q.question}`;
-        quizDiv.appendChild(questionEl);
-
-        if (q.type === "mc") {
-          const answersDiv = document.createElement("div");
-          answersDiv.className = "answers";
-          q.answers.forEach((a, i) => {
-            const label = document.createElement("label");
-            const input = document.createElement("input");
-            input.type = "radio";
-            input.name = "answer";
-            input.value = i;
-            label.appendChild(input);
-            label.append(" ", a);
-            answersDiv.appendChild(label);
-          });
-          quizDiv.appendChild(answersDiv);
-        } else if (q.type === "text") {
-          const input = document.createElement("input");
-          input.type = "text";
-          input.id = "text-answer";
-          input.style.width = "100%";
-          quizDiv.appendChild(input);
-        }
-
-        const nextBtn = document.createElement("button");
-        nextBtn.textContent = "Nästa";
-        nextBtn.onclick = () => checkAnswer(q);
-        quizDiv.appendChild(nextBtn);
-      }
-
-      function checkAnswer(q) {
-        if (q.type === "mc") {
-          const selected = document.querySelector(
-            "input[name='answer']:checked"
-          );
-          if (selected && parseInt(selected.value) === q.correct) score++;
-        }
-        currentQuestion++;
-        showQuestion();
-      }
-
-      function showResult() {
-        document.getElementById("quiz").classList.add("hidden");
-        const resultDiv = document.getElementById("result");
-        resultDiv.classList.remove("hidden");
-        resultDiv.innerHTML = `${userName}, du fick ${score} av ${
-          questions.filter((q) => q.type === "mc").length
-        } rätt på quizet!`;
-      }
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
